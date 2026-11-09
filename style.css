@@ -1,0 +1,164 @@
+/* Ученический сайт ITdeti. Цвета как в CRM (itdetiWeb/app.css), но всё крупнее:
+   аудитория 8–15 лет, в первую очередь телефон. */
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #f5f6f9;
+  --surface: #ffffff;
+  --surface-soft: #f8f9fc;
+  --border: #e6e8ee;
+  --text: #172033;
+  --muted: #697386;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-soft: #eef0ff;
+  --success: #14803a;
+  --success-bg: #eaf8ef;
+  --danger: #b42318;
+  --danger-bg: #fff0ef;
+  --warning: #a15c00;
+  --warning-bg: #fff7e5;
+  --shadow: 0 10px 35px rgba(20, 30, 60, .07);
+  --radius: 18px;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, #e9edff, transparent 42%), var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+button, input { font: inherit; }
+a { color: var(--primary); }
+
+/* ---------- верхняя панель ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 5;
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.brand { font-weight: 800; font-size: 22px; color: var(--primary); text-decoration: none; }
+.hello { flex: 1; color: var(--muted); font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.page { max-width: 760px; margin: 0 auto; padding: 20px 16px 48px; }
+.loading { color: var(--muted); text-align: center; margin-top: 40px; }
+
+h1 { font-size: 28px; line-height: 1.2; margin: 8px 0 16px; }
+h2 { font-size: 22px; margin: 24px 0 12px; }
+.muted { color: var(--muted); }
+
+/* ---------- кнопки ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 48px; padding: 10px 18px;
+  border: 1px solid var(--border); border-radius: 14px;
+  background: var(--surface); color: var(--text);
+  font-weight: 600; text-decoration: none; cursor: pointer;
+}
+.btn:disabled { opacity: .6; cursor: wait; }
+.btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-big { width: 100%; min-height: 60px; font-size: 20px; border-radius: 16px; }
+.btn-ghost { min-height: 40px; padding: 6px 14px; font-size: 16px; }
+.btn-success { background: var(--success); border-color: var(--success); color: #fff; }
+.back { display: inline-flex; align-items: center; min-height: 44px; font-size: 17px; text-decoration: none; font-weight: 600; }
+
+/* ---------- вход ---------- */
+.login-card {
+  max-width: 420px; margin: 8vh auto 0;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 22px;
+  padding: 28px 22px; box-shadow: 0 24px 70px rgba(20, 30, 60, .1);
+}
+.login-logo { font-size: 34px; font-weight: 800; color: var(--primary); text-align: center; }
+.login-sub { text-align: center; color: var(--muted); margin: 4px 0 22px; }
+.field { display: block; margin-bottom: 16px; }
+.field span { display: block; font-weight: 600; margin-bottom: 6px; }
+.field input {
+  width: 100%; min-height: 56px; padding: 12px 16px;
+  border: 2px solid var(--border); border-radius: 14px; background: var(--surface-soft);
+  font-size: 22px; letter-spacing: .5px;
+}
+.field input:focus { outline: none; border-color: var(--primary); background: #fff; }
+
+.alert { border-radius: 14px; padding: 12px 16px; margin-bottom: 16px; font-weight: 600; }
+.alert-error { background: var(--danger-bg); color: var(--danger); }
+.alert-warning { background: var(--warning-bg); color: var(--warning); }
+.alert-ok { background: var(--success-bg); color: var(--success); }
+
+/* ---------- карточки курсов ---------- */
+.card {
+  display: block; background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow);
+  color: inherit; text-decoration: none;
+}
+a.card:active { transform: scale(.99); }
+.card-title { font-size: 22px; font-weight: 700; margin: 0 0 6px; }
+.progress { height: 14px; background: var(--primary-soft); border-radius: 99px; overflow: hidden; margin: 12px 0 6px; }
+.progress > i { display: block; height: 100%; background: var(--primary); border-radius: 99px; }
+.empty { text-align: center; color: var(--muted); padding: 32px 12px; background: var(--surface); border-radius: var(--radius); border: 1px dashed var(--border); }
+
+/* ---------- уроки в курсе ---------- */
+.module { margin-bottom: 22px; }
+.module-title { font-size: 20px; font-weight: 700; margin: 0 0 10px; }
+.lesson-row {
+  display: flex; align-items: center; gap: 14px;
+  min-height: 64px; padding: 12px 14px; margin-bottom: 10px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  color: inherit; text-decoration: none;
+}
+.lesson-row .num {
+  flex: 0 0 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface-soft); border: 2px solid var(--border); font-weight: 700;
+}
+.lesson-row .name { flex: 1; font-weight: 600; }
+.lesson-row .tag { font-size: 14px; color: var(--muted); white-space: nowrap; }
+.lesson-row.done .num { background: var(--success); border-color: var(--success); color: #fff; }
+.lesson-row.done .tag { color: var(--success); font-weight: 700; }
+.lesson-row.in_progress .num { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); }
+.lesson-row.in_progress .tag { color: var(--primary); font-weight: 700; }
+
+/* ---------- урок ---------- */
+.crumbs { color: var(--muted); font-size: 16px; margin-top: 4px; }
+.status-pill { display: inline-block; padding: 4px 12px; border-radius: 99px; font-size: 15px; font-weight: 700; }
+.status-pill.done { background: var(--success-bg); color: var(--success); }
+.status-pill.in_progress { background: var(--primary-soft); color: var(--primary); }
+.status-pill.not_started { background: var(--surface-soft); color: var(--muted); }
+
+.material, .task {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px; margin-bottom: 14px;
+}
+.material-title, .task-title { font-weight: 700; font-size: 19px; margin: 0 0 8px; }
+.material-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.material-text { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
+.embed { margin-top: 12px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+.embed iframe { display: block; width: 100%; height: 60vh; border: 0; }
+.task-kind { display: inline-block; font-size: 14px; font-weight: 700; color: var(--primary); background: var(--primary-soft); padding: 2px 10px; border-radius: 99px; margin-bottom: 8px; }
+.task-statement { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0 0 10px; }
+pre.code {
+  background: #0f172a; color: #e2e8f0; padding: 14px; border-radius: 12px;
+  overflow-x: auto; font-size: 16px; line-height: 1.45; margin: 0 0 10px;
+}
+details.hint summary { cursor: pointer; font-weight: 600; color: var(--warning); min-height: 40px; display: flex; align-items: center; }
+details.hint p { margin: 6px 0 0; white-space: pre-wrap; }
+
+.finish { margin-top: 26px; }
+.done-box { text-align: center; background: var(--success-bg); color: var(--success); border-radius: var(--radius); padding: 18px; font-weight: 700; font-size: 20px; margin-bottom: 12px; }
+.nav-row { display: flex; gap: 10px; margin-top: 12px; }
+.nav-row .btn { flex: 1; }
+
+@media (min-width: 700px) {
+  body { font-size: 19px; }
+  h1 { font-size: 32px; }
+  .page { padding-top: 28px; }
+}
