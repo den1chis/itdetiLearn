@@ -11,15 +11,21 @@
 (function () {
   'use strict';
 
-  var API = ((window.ITDETI_LEARN_CONFIG || {}).API_URL || 'http://localhost:8000').replace(/\/+$/, '');
-  var TOKEN_KEY = 'itdeti_learn_token';
-  var NAME_KEY = 'itdeti_learn_name';
+  var API = ((window.ITDETI_LEARN_CONFIG || {}).API_URL || 'https://itdeti.onrender.com').replace(/\/+$/, '');
+  // Свои ключи хранилища: CRM живёт на том же адресе (den1chis.github.io), у неё ключи itdeti_*_token.
+  // Сайт читает и пишет только ключи с префиксом itdeti_learn_.
+  var KEY_PREFIX = 'itdeti_learn_';
+  var TOKEN_KEY = KEY_PREFIX + 'token';
+  var NAME_KEY = KEY_PREFIX + 'name';
+  // Встраивать можно только страницы Google (как и в CSP, frame-src).
+  var EMBED_HOSTS = ['docs.google.com', 'drive.google.com'];
   var app = document.getElementById('app');
   var topbar = document.getElementById('topbar');
   var flash = null; // сообщение для следующего экрана (например «время входа истекло»)
 
   // ------------------------------------------------------------ хранилище (может быть недоступно)
   function store(key, value) {
+    if (key.indexOf(KEY_PREFIX) !== 0) return null;  // чужие ключи (CRM) не трогаем никогда
     try {
       if (value === undefined) return localStorage.getItem(key);
       if (value === null) localStorage.removeItem(key); else localStorage.setItem(key, value);
@@ -36,6 +42,7 @@
       if (v === null || v === undefined || v === false) return;
       if (k === 'text') el.textContent = v;
       else if (k === 'class') el.className = v;
+      else if (k === 'style') el.style.cssText = v;  // через CSSOM: CSP запрещает style-атрибуты
       else if (k.slice(0, 2) === 'on') el.addEventListener(k.slice(2), v);
       else el.setAttribute(k, v === true ? '' : v);
     });
@@ -56,6 +63,12 @@
     try {
       var u = new URL(url);
       return (u.protocol === 'https:' || u.protocol === 'http:') ? u.href : null;
+    } catch (_) { return null; }
+  }
+  function safeEmbedUrl(url) {
+    try {
+      var u = new URL(url);
+      return (u.protocol === 'https:' && EMBED_HOSTS.indexOf(u.hostname) !== -1) ? u.href : null;
     } catch (_) { return null; }
   }
 
@@ -233,13 +246,19 @@
         h('p', { class: 'material-text', text: m.body || '' }));
     }
     var url = safeUrl(m.url);
-    var embed = safeUrl(m.embed_url);
+    var embed = safeEmbedUrl(m.embed_url);
     var frameBox = h('div');
     var actions = h('div', { class: 'material-actions' },
       url ? h('a', { class: 'btn btn-primary', href: url, target: '_blank', rel: 'noopener noreferrer', text: 'Открыть ↗' }) : null,
       embed ? h('button', { class: 'btn', type: 'button', text: 'Показать здесь', onclick: function (e) {
         if (frameBox.firstChild) { frameBox.textContent = ''; e.target.textContent = 'Показать здесь'; return; }
-        frameBox.appendChild(h('div', { class: 'embed' }, h('iframe', { src: embed, allow: 'fullscreen', allowfullscreen: true, loading: 'lazy', title: m.title, referrerpolicy: 'no-referrer' })));
+        frameBox.appendChild(h('div', { class: 'embed' }, h('iframe', {
+          src: embed, allow: 'fullscreen', loading: 'lazy', title: m.title,
+          referrerpolicy: 'no-referrer',
+          // Страница Google работает (скрипты, свой origin, «открыть в новой вкладке»), но не может
+          // управлять нашей вкладкой (нет allow-top-navigation) и не видит наш origin.
+          sandbox: 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-presentation'
+        })));
         e.target.textContent = 'Скрыть';
       } }) : null
     );
