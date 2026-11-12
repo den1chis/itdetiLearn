@@ -133,6 +133,9 @@
   }
 
   // ------------------------------------------------------------ экран: вход
+  var WAKE_HINT_MS = 3000;
+  var WAKING_TEXT = 'Сервер просыпается, это может занять до минуты…';
+
   function showLogin() {
     topbar.hidden = true;
     var errorBox = h('div', { role: 'alert' });
@@ -149,14 +152,28 @@
         showError('Введи логин и пароль.');
         return;
       }
+      if (button.disabled) return;  // запрос уже идёт: пароль второй раз не отправляется
       button.disabled = true; button.textContent = 'Входим…';
+      // Бесплатный сервер засыпает без запросов и просыпается до минуты: если ответа нет дольше 3 секунд,
+      // говорим об этом. Запрос остаётся тем же самым (без повторной отправки пароля).
+      var wakeTimer = setTimeout(function () {
+        wakeTimer = null;
+        errorBox.className = 'alert alert-warning';
+        errorBox.textContent = WAKING_TEXT;
+      }, WAKE_HINT_MS);
+      function stopWaiting() {
+        if (wakeTimer) { clearTimeout(wakeTimer); wakeTimer = null; }
+        if (errorBox.textContent === WAKING_TEXT) { errorBox.className = ''; errorBox.textContent = ''; }
+      }
       api('/student/auth/login', { method: 'POST', body: { login: login, password: password }, noAuth: true })
         .then(function (data) {
+          stopWaiting();
           store(TOKEN_KEY, data.access_token);
           store(NAME_KEY, data.full_name || '');
           location.hash = '#/courses';
         })
         .catch(function (err) {
+          stopWaiting();
           if (err.code === 'locked') {
             var n = err.extra.retry_after_minutes || 15;
             showError('Вход заблокирован на ' + n + ' ' + minutesWord(n) + ': было много неверных паролей. Подожди и попробуй снова.');
