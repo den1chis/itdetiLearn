@@ -176,14 +176,19 @@
     store(STAFF_NAME_KEY, null); store(STAFF_ROLES_KEY, null);
   }
 
-  function logout(message) {
-    // Выход чистит только ключи платформы (itdeti_learn_*). Сессия CRM на этом же адресе не затрагивается.
+  // Отзыв refresh-токена сотрудника на сервере (выход, вход учеником поверх сессии сотрудника).
+  function revokeStaff() {
     var refresh = store(STAFF_REFRESH_KEY);
     if (refresh) {
       fetch(API + '/auth/logout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ refresh_token: refresh }) })
         .catch(function () { /* токен истечёт сам */ });
     }
     clearStaff();
+  }
+
+  function logout(message) {
+    // Выход чистит только ключи платформы (itdeti_learn_*). Сессия CRM на этом же адресе не затрагивается.
+    revokeStaff();
     clearStudent();
     flash = message || null;
     if (location.hash !== '#/login') location.hash = '#/login'; else route();
@@ -244,7 +249,7 @@
         ? staffLogin(login, password)
         : api('/student/auth/login', { method: 'POST', body: { login: login, password: password }, noAuth: true })
           .then(function (data) {
-            clearStaff();
+            revokeStaff();
             store(TOKEN_KEY, data.access_token);
             store(NAME_KEY, data.full_name || '');
             location.hash = '#/courses';
@@ -453,7 +458,7 @@
   // Новая пара токенов сотрудника -> проверка ролей (/auth/me) -> сохранение. Без роли admin/teacher/methodist — отказ.
   function startStaffSession(tokens) {
     clearStudent();
-    clearStaff();
+    revokeStaff();
     store(STAFF_ACCESS_KEY, tokens.access_token);
     store(STAFF_REFRESH_KEY, tokens.refresh_token);
     return api('/auth/me').then(function (me) {
