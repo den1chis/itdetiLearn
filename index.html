@@ -3,18 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#4f46e5">
   <meta name="referrer" content="no-referrer">
   <!-- CSP: скрипты и стили только свои файлы; запросы — к API (локальный или Render, см. config.js);
        встраивание — только страницы Google; формы, плагины и <base> запрещены. -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' http://localhost:8000 http://127.0.0.1:8000 https://itdeti.onrender.com; frame-src https://docs.google.com https://drive.google.com; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <title>ITdeti — Мои уроки</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=2026111301">
-  <link rel="stylesheet" href="style.css?v=2026111301">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=2026112101">
+  <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png?v=2026112101">
+  <link rel="icon" href="favicon.ico?v=2026112101" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2026112101">
+  <link rel="manifest" href="manifest.webmanifest?v=2026112101">
+  <meta name="theme-color" content="#4A90E2">
+  <meta name="apple-mobile-web-app-title" content="ITdeti">
+  <link rel="stylesheet" href="style.css?v=2026112101">
 </head>
 <body>
   <header class="topbar" id="topbar" hidden>
-    <a class="brand" href="#/courses">ITdeti</a>
+    <a class="brand" href="#/courses"><img class="logo-mark" src="logo-64.png?v=2026112101" srcset="logo-64.png?v=2026112101 1x, logo-128.png?v=2026112101 2x" width="30" height="30" alt="">ITdeti</a>
     <span class="hello" id="hello"></span>
     <button class="btn btn-ghost" id="logoutBtn" type="button">Выйти</button>
   </header>
@@ -23,7 +28,7 @@
     <p class="loading">Загрузка…</p>
   </main>
 
-  <script src="config.js?v=2026111301"></script>
-  <script src="app.js?v=2026111301"></script>
+  <script src="config.js?v=2026112101"></script>
+  <script src="app.js?v=2026112101"></script>
 </body>
 </html>

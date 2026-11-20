@@ -274,7 +274,7 @@
         })
         .then(function () { button.disabled = false; button.textContent = 'Войти'; });
     } },
-      h('div', { class: 'login-logo', text: 'ITdeti' }),
+      h('div', { class: 'login-logo' }, h('img', { class: 'logo-mark', src: 'logo-64.png?v=2026112101', srcset: 'logo-64.png?v=2026112101 1x, logo-128.png?v=2026112101 2x', width: '40', height: '40', alt: '' }), 'ITdeti'),
       h('div', { class: 'login-sub', text: 'Вход для учеников и преподавателей' }),
       errorBox,
       h('label', { class: 'field', for: 'login' }, h('span', { text: 'Логин' }), loginInput),
